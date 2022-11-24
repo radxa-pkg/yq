@@ -60,7 +60,7 @@ jobs:
           pushd src
             export PATH="${PATH}:$(go env GOPATH)/bin"
             scripts/devtools.sh
-            ln -s /usr/lib/go/ /usr/local/go
+            ln -s $(go env GOROOT) /usr/local/go
             debuild --no-sign
           popd
 
