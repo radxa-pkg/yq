@@ -54,11 +54,12 @@ jobs:
             fi
           popd
 
-      - name: Check the build
+      - name: Build
         shell: bash -l {0}
         run: |
           pushd src
             export PATH="${PATH}:$(go env GOPATH)/bin"
+            export GOROOT="${HOME}/go"
             scripts/devtools.sh
             debuild --no-sign
           popd
