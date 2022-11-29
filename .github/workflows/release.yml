@@ -43,7 +43,8 @@ jobs:
             sed -i "s|amd64|arm64|g" scripts/release-deb.sh
             sed -i "s|docker build|docker build --platform linux/arm64|g" scripts/release-deb.sh
             sed -i "s|docker run|docker run --platform linux/arm64|g" scripts/release-deb.sh
-            sed -E -i 's|^(RUN useradd.*) \\$|\1 mkdir /home/yq/go \&\& chown -R yq:yq /home/yq \&\& \\|g' scripts/release-deb.sh
+            sed -i "s|devscripts|devscripts sudo|g" scripts/release-deb.sh
+            sed -i 's|  "${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"|  "${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}" bash -c "sed -i -E \\"s/^(yq):(x?):([0-9]+):([0-9]+):(.*):(.*):(.*)$/\\1:\\2:$(id -u):$(id -g):\\5:\\6:\\7/\\" /etc/passwd \&\& sudo -u yq /usr/bin/build.sh"|g' scripts/release-deb.sh
             scripts/release-deb.sh ${{ steps.update.outputs.latest_release }} -d main -o ..
           popd
           ls -la
