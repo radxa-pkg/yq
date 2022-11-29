@@ -43,7 +43,7 @@ jobs:
             sed -i "s|amd64|arm64|g" scripts/release-deb.sh
             sed -i "s|docker build|docker build --platform linux/arm64|g" scripts/release-deb.sh
             sed -i "s|docker run|docker run --platform linux/arm64|g" scripts/release-deb.sh
-            sed -E -i 's|^(RUN useradd.*) \\$|\1 chown -R yq:yq /home/yq \&\& \\|g' scripts/release-deb.sh
+            sed -E -i 's|^(RUN useradd.*) \\$|\1 mkdir /home/yq/go \&\& chown -R yq:yq /home/yq \&\& \\|g' scripts/release-deb.sh
             scripts/release-deb.sh ${{ steps.update.outputs.latest_release }} -d main -o ..
           popd
           ls -la
