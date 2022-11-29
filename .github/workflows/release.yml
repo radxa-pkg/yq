@@ -37,6 +37,8 @@ jobs:
 
       - name: Build
         run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y qemu-user-static binfmt-support
           pushd src
             sed -i "s|bitnami/minideb:bullseye|bitnami/minideb:bullseye-arm64|" scripts/release-deb.sh
             scripts/release-deb.sh ${{ steps.update.outputs.latest_release }} -d main -o ..
