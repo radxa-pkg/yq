@@ -38,12 +38,12 @@ jobs:
             sed -i "s|docker build|docker build --platform linux/arm64|g" scripts/release-deb.sh
             sed -i "s|docker run|docker run --platform linux/arm64|g" scripts/release-deb.sh
             sed -i "s|devscripts|devscripts sudo|g" scripts/release-deb.sh
+            sed -i 's|PATH=$PATH:/usr/local/go/bin|PATH=\\$PATH:/usr/local/go/bin|g' scripts/release-deb.sh
             sed -i 's|-u "$(id -u)"|-u 0:0|g' scripts/release-deb.sh
+            sed -i 's|params=("-d" "-S")|params=("-d")|g' scripts/release-deb.sh
             sed -i 's|  "${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"|  "${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}" bash -c "sed -i -E \\"s/^(yq):(x?):([0-9]+):([0-9]+):(.*):(.*):(.*)$/\\1:\\2:$(id -u):$(id -g):\\5:\\6:\\7/\\" /etc/passwd \&\& chown -R yq:yq /home/yq \&\& sudo -u yq /usr/bin/build.sh"|g' scripts/release-deb.sh
             scripts/release-deb.sh ${{ steps.update.outputs.latest_release }} -d main -o ..
           popd
-          ls -la
-          ls -la src
 
       - name: Release
         if: steps.update.outputs.current_release != steps.update.outputs.latest_release
