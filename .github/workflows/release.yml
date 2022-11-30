@@ -8,22 +8,21 @@ jobs:
     steps:
       - name: Checkout base repo
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
 
       - name: Checkout yq repo
         uses: actions/checkout@v3
         with:
           repository: mikefarah/yq
+          path: src
           fetch-depth: 0
 
-      - name: Update submodule
+      - name: Get the latest yq release
         id: update
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pushd src
-            version_prefix=v
+            version_prefix="v"
             latest_tag="$(git tag -l "${version_prefix}*" | grep v[0-9] | sort -rV | head -n 1)"
             latest_release="$(echo $latest_tag | sed "s/${version_prefix}//")"
             echo "latest_release=$latest_release" >> $GITHUB_OUTPUT
